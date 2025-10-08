@@ -1,0 +1,44 @@
+@if (vm$ | async; as gameState) {
+    <div class="operation">
+        <span>
+            {{ gameState.currentOperation?.a }} +
+            {{ gameState.currentOperation?.b }} =
+        </span>
+    </div>
+
+    <div>
+        <form [formGroup]="gameForm">
+            <mat-form-field
+                appearance="outline"
+                class="measure-wide">
+                <mat-label>Answer</mat-label>
+                <input
+                    matInput
+                    type="text"
+                    formControlName="playerInput"
+                    name="playerInput" />
+            </mat-form-field>
+            <button
+                class="flex-auto"
+                type="button"
+                mat-flat-button
+                [disabled]="!gameForm.valid"
+                (click)="fireLaser()">
+                Fire
+            </button>
+        </form>
+    </div>
+
+    <h3>History</h3>
+    <div>
+        @for (row of gameState.history.reverse(); track $index) {
+            <div>
+                <span
+                    >{{ row.operation.a }} + {{ row.operation.b }} =
+                    {{ row.operation.result }}
+                </span>
+                <span>Player value: {{ row.playerInput }} </span>
+            </div>
+        }
+    </div>
+}
