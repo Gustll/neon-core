@@ -87,7 +87,6 @@ export class GameService {
     );
     readonly vm$ = this.state$.asObservable(); // A viewModel just so we can easily use the observable
 
-    public currentOperation!: Operation;
     public score: number = 0;
 
     get currentState(): GameState {
@@ -146,8 +145,7 @@ export class GameService {
         }
 
         const enemies = this.currentEnemies;
-        const correctAnswer =
-            playerInput === currentState.currentOperation.result;
+        const correctAnswer = this.isInputCorrect(playerInput);
         const history: GameHistory[] = [
             ...currentState.history,
             {
@@ -169,7 +167,7 @@ export class GameService {
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
             history.length - mistakes ===
-                LEVEL_CONFIG[currentState.level].operations
+            LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
 
@@ -205,5 +203,13 @@ export class GameService {
 
     public isFirstEnemy(beginS: number): boolean {
         return this.currentEnemies.every((obj) => obj.beginS >= beginS);
+    }
+
+    public isInputCorrect(playerInput: number): boolean {
+        const currentOperation = this.currentState.currentOperation;
+        if (currentOperation) {
+            return playerInput === currentOperation.result;
+        }
+        return false;
     }
 }

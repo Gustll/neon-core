@@ -17,6 +17,7 @@ import { BehaviorSubject } from 'rxjs';
 interface Laser {
     targetX: number;
     targetY: number;
+    color: string;
 }
 
 @Component({
@@ -75,7 +76,7 @@ export class GameAnimationsComponent implements OnInit {
         this.gameService.changeGameStatus(GameStatus.GameOver);
     }
 
-    public fireLaser() {
+    public animateLaser(playerInput: number) {
         const svg = this.game?.nativeElement;
         if (!svg) {
             return;
@@ -103,7 +104,11 @@ export class GameAnimationsComponent implements OnInit {
         }
         const svgPt = pt.matrixTransform(ctm.inverse());
 
-        this.laser$.next({ targetX: svgPt.x, targetY: svgPt.y });
+        const color = this.gameService.isInputCorrect(playerInput)
+            ? 'blue'
+            : 'red';
+
+        this.laser$.next({ targetX: svgPt.x, targetY: svgPt.y, color });
 
         setTimeout(() => this.laser$.next(null), 150);
     }

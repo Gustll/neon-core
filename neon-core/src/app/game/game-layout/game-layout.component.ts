@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,6 +27,7 @@ import { GameAnimationsComponent } from '../game-animations/game-animations.comp
     standalone: true,
 })
 export class GameLayoutComponent implements OnInit {
+    @ViewChild('game') game!: GameAnimationsComponent;
     private gameService = inject(GameService);
 
     public vm$ = this.gameService.vm$;
@@ -45,6 +46,7 @@ export class GameLayoutComponent implements OnInit {
     public fireLaser() {
         const { playerInput } = this.gameForm.getRawValue();
         if (playerInput) {
+            this.game.animateLaser(playerInput);
             this.gameService.fireLaser(playerInput);
         }
         this.gameForm.reset();
