@@ -35,14 +35,12 @@ describe('GameService', () => {
             spyOn(service, 'generateOperation').and.returnValue(fakeOp);
 
             const level = 2;
-            const levelConfig = LEVEL_CONFIG[level];
 
             service.startGame(level);
 
             service.vm$.pipe(take(1)).subscribe((state) => {
                 expect(state.status).toEqual(GameStatus.Running);
                 expect(state.level).toEqual(level);
-                expect(state.gameSpeed).toEqual(levelConfig.gameSpeed);
                 expect(state.mistakes).toEqual(0);
                 expect(state.history).toEqual([]);
                 expect(state.currentOperation).toEqual(fakeOp);
@@ -59,7 +57,6 @@ describe('GameService', () => {
             spyOn(service, 'generateOperation').and.returnValue(fakeOp);
 
             const level = 1;
-            const levelConfig = LEVEL_CONFIG[level];
 
             service.startGame(level);
             service.fireLaser(fakeOp.result);
@@ -71,7 +68,6 @@ describe('GameService', () => {
             service.vm$.pipe(take(1)).subscribe((state) => {
                 expect(state.status).toEqual(GameStatus.Running);
                 expect(state.level).toEqual(level);
-                expect(state.gameSpeed).toEqual(levelConfig.gameSpeed);
                 expect(state.mistakes).toEqual(0);
                 expect(state.history).toEqual(history);
                 expect(state.currentOperation).toEqual(fakeOp);
@@ -87,7 +83,6 @@ describe('GameService', () => {
             spyOn(service, 'generateOperation').and.returnValue(fakeOp);
 
             const level = 1;
-            const levelConfig = LEVEL_CONFIG[level];
 
             service.startGame(level);
             service.fireLaser(fakeOp.result);
@@ -107,9 +102,6 @@ describe('GameService', () => {
             service.vm$.pipe(take(1)).subscribe((state) => {
                 expect(state.status).toEqual(GameStatus.Running);
                 expect(state.level).toEqual(level);
-                expect(state.gameSpeed).toEqual(
-                    levelConfig.gameSpeed + service.speedPenalty,
-                ); // Check that we increment speed for the amount of the penalty
                 expect(state.mistakes).toEqual(1);
                 expect(state.history).toEqual(history);
                 expect(state.currentOperation).toEqual(fakeOp);
@@ -146,7 +138,6 @@ describe('GameService', () => {
             service.vm$.pipe(take(1)).subscribe((state) => {
                 expect(state.status).toEqual(GameStatus.Won);
                 expect(state.level).toEqual(level);
-                expect(state.gameSpeed).toEqual(levelConfig.gameSpeed);
                 expect(state.mistakes).toEqual(0);
                 expect(state.history).toEqual(history);
                 expect(state.currentOperation).toEqual(fakeOp);

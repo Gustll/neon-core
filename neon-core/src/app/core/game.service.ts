@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 export type Level = 1 | 2 | 3;
 
 export interface LevelConfig {
-    gameSpeed: number;
     minRange: number;
     maxRange: number;
     operations: number; // Count of enemies
@@ -13,21 +12,18 @@ export interface LevelConfig {
 
 export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
     1: {
-        gameSpeed: 1,
         minRange: 1,
         maxRange: 10,
         operations: 3,
         pathDuration: 20,
     },
     2: {
-        gameSpeed: 1.2,
         minRange: 1,
         maxRange: 10,
         operations: 30,
         pathDuration: 18,
     },
     3: {
-        gameSpeed: 1.5,
         minRange: 1,
         maxRange: 50,
         operations: 3,
@@ -68,7 +64,6 @@ interface GameState {
     status: GameStatus;
     level: Level | null;
     history: GameHistory[];
-    gameSpeed: number;
     mistakes: number;
     currentOperation: Operation | null;
     enemies: Enemy[];
@@ -82,7 +77,6 @@ export class GameService {
         status: GameStatus.Paused,
         level: null,
         history: [],
-        gameSpeed: 1,
         mistakes: 0,
         currentOperation: null,
         enemies: [],
@@ -95,7 +89,6 @@ export class GameService {
 
     public currentOperation!: Operation;
     public score: number = 0;
-    public speedPenalty = 0.1;
 
     constructor() {}
 
@@ -116,26 +109,17 @@ export class GameService {
     }
 
     public startGame(level: Level): void {
-        const cfg = LEVEL_CONFIG[level];
         const operation = this.generateOperation(level);
 
         this.state$.next({
             status: GameStatus.Running,
             level,
-            gameSpeed: cfg.gameSpeed,
             mistakes: 0,
             history: [],
             currentOperation: operation,
             enemies: [],
         });
     }
-
-    // private generateEnemies(level: Level): Enemy[] {
-    //     const cfg = LEVEL_CONFIG[level]
-    //     return new Array(cfg.operations).fill(null).map((_) => {
-    //         return { visible: false, defeated: false }
-    //     })
-    // }
 
     public generateOperation(level: Level): Operation {
         const a = this.generateRandom(level);
@@ -176,10 +160,8 @@ export class GameService {
         ];
 
         let mistakes = currentState.mistakes;
-        let gameSpeed = currentState.gameSpeed;
 
         if (!correctAnswer) {
-            gameSpeed += this.speedPenalty;
             mistakes += 1;
         } else {
             enemies.shift(); // We defeated the enemy so we can remove
@@ -197,7 +179,6 @@ export class GameService {
             ...currentState,
             history,
             mistakes,
-            gameSpeed,
             currentOperation,
             status,
             enemies,
