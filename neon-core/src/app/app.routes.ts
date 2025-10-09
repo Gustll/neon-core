@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { GameSetupComponent } from './game-setup/game-setup.component';
-import { GameComponent } from './game/game.component';
+import { GameLayoutComponent } from './game/game-layout/game-layout.component';
 
 export const routes: Routes = [
     {
@@ -8,8 +8,8 @@ export const routes: Routes = [
         component: GameSetupComponent,
     },
     {
-        path: 'game',
-        component: GameComponent,
+        path: 'play',
+        component: GameLayoutComponent,
     },
     { path: '', redirectTo: 'game-setup', pathMatch: 'full' },
     { path: '**', redirectTo: 'game-setup' },

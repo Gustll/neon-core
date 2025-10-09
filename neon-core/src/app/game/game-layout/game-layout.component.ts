@@ -9,10 +9,10 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { GameService } from '../core/game.service';
+import { GameService } from '../../core/game.service';
 
 @Component({
-    selector: 'app-game',
+    selector: 'app-game-layout',
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -20,11 +20,11 @@ import { GameService } from '../core/game.service';
         MatInputModule,
         MatButtonModule,
     ],
-    templateUrl: './game.component.html',
-    styleUrl: './game.component.scss',
+    templateUrl: './game-layout.component.html',
+    styleUrl: './game-layout.component.scss',
     standalone: true,
 })
-export class GameComponent implements OnInit {
+export class GameLayoutComponent {
     private gameService = inject(GameService);
 
     public vm$ = this.gameService.vm$;
