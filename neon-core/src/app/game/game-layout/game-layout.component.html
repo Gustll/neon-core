@@ -1,44 +1,39 @@
 @if (vm$ | async; as gameState) {
-    <div class="operation">
-        <span>
-            {{ gameState.currentOperation?.a }} +
-            {{ gameState.currentOperation?.b }} =
-        </span>
-    </div>
+    <div class="game-layout w-100 h-100 center pa3">
+        <div class="flex flex-column flex-row-l h-100">
+            <aside class="w-100 w-20-l pr3">
+                <!-- Controls -->
 
-    <div>
-        <form [formGroup]="gameForm">
-            <mat-form-field
-                appearance="outline"
-                class="measure-wide">
-                <mat-label>Answer</mat-label>
-                <input
-                    matInput
-                    type="text"
-                    formControlName="playerInput"
-                    name="playerInput" />
-            </mat-form-field>
-            <button
-                class="flex-auto"
-                type="button"
-                mat-flat-button
-                [disabled]="!gameForm.valid"
-                (click)="fireLaser()">
-                Fire
-            </button>
-        </form>
-    </div>
+                <form
+                    [formGroup]="gameForm"
+                    class="w-100 flex flex-column">
+                    <mat-form-field
+                        appearance="outline"
+                        class="measure-wide">
+                        <mat-label>Answer</mat-label>
+                        <input
+                            matInput
+                            type="number"
+                            formControlName="playerInput"
+                            name="playerInput" />
+                    </mat-form-field>
+                    <button
+                        class="flex-auto"
+                        type="button"
+                        mat-flat-button
+                        [disabled]="!gameForm.valid"
+                        (click)="fireLaser()">
+                        Fire
+                    </button>
+                </form>
 
-    <h3>History</h3>
-    <div>
-        @for (row of gameState.history.reverse(); track $index) {
-            <div>
-                <span
-                    >{{ row.operation.a }} + {{ row.operation.b }} =
-                    {{ row.operation.result }}
-                </span>
-                <span>Player value: {{ row.playerInput }} </span>
-            </div>
-        }
+                <!-- History -->
+                <div>History</div>
+            </aside>
+
+            <main class="w-100 w-80-l">
+                <app-game-animations></app-game-animations>
+            </main>
+        </div>
     </div>
 }

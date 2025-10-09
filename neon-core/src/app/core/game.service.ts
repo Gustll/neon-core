@@ -1,21 +1,38 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-export type Level = 1 | 2 | 3 | 4 | 5;
+export type Level = 1 | 2 | 3;
 
-interface LevelConfig {
+export interface LevelConfig {
     gameSpeed: number;
     minRange: number;
     maxRange: number;
-    operations: number;
+    operations: number; // Count of enemies
+    pathDuration: number;
 }
 
 export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
-    1: { gameSpeed: 1, minRange: 1, maxRange: 10, operations: 3 },
-    2: { gameSpeed: 1.2, minRange: 1, maxRange: 10, operations: 30 },
-    3: { gameSpeed: 1.5, minRange: 1, maxRange: 50, operations: 50 },
-    4: { gameSpeed: 1.7, minRange: 50, maxRange: 100, operations: 100 },
-    5: { gameSpeed: 2, minRange: 50, maxRange: 150, operations: 150 },
+    1: {
+        gameSpeed: 1,
+        minRange: 1,
+        maxRange: 10,
+        operations: 3,
+        pathDuration: 20,
+    },
+    2: {
+        gameSpeed: 1.2,
+        minRange: 1,
+        maxRange: 10,
+        operations: 30,
+        pathDuration: 18,
+    },
+    3: {
+        gameSpeed: 1.5,
+        minRange: 1,
+        maxRange: 50,
+        operations: 3,
+        pathDuration: 10,
+    },
 };
 
 export enum Operator {
@@ -36,10 +53,15 @@ export interface GameHistory {
 }
 
 export enum GameStatus {
-    Idle = 'idle',
-    Running = 'running',
-    Won = 'won',
-    Lost = 'lost',
+    Paused = 'Paused',
+    Running = 'Running',
+    Won = 'Won',
+    GameOver = 'GameOver',
+}
+
+interface Enemy {
+    defeated: boolean;
+    beginS: number;
 }
 
 interface GameState {
@@ -49,6 +71,7 @@ interface GameState {
     gameSpeed: number;
     mistakes: number;
     currentOperation: Operation | null;
+    enemies: Enemy[];
 }
 
 @Injectable({
@@ -56,12 +79,13 @@ interface GameState {
 })
 export class GameService {
     private initialState: GameState = {
-        status: GameStatus.Idle,
+        status: GameStatus.Paused,
         level: null,
         history: [],
         gameSpeed: 1,
         mistakes: 0,
         currentOperation: null,
+        enemies: [],
     };
 
     private state$: BehaviorSubject<GameState> = new BehaviorSubject<GameState>(
@@ -79,6 +103,18 @@ export class GameService {
         return this.state$.value;
     }
 
+    get currentEnemies(): Enemy[] {
+        return this.currentState.enemies;
+    }
+
+    get enemyCount(): number {
+        return this.currentEnemies.length;
+    }
+
+    public getLevelConfig(level: Level): LevelConfig {
+        return LEVEL_CONFIG[level];
+    }
+
     public startGame(level: Level): void {
         const cfg = LEVEL_CONFIG[level];
         const operation = this.generateOperation(level);
@@ -90,8 +126,16 @@ export class GameService {
             mistakes: 0,
             history: [],
             currentOperation: operation,
+            enemies: [],
         });
     }
+
+    // private generateEnemies(level: Level): Enemy[] {
+    //     const cfg = LEVEL_CONFIG[level]
+    //     return new Array(cfg.operations).fill(null).map((_) => {
+    //         return { visible: false, defeated: false }
+    //     })
+    // }
 
     public generateOperation(level: Level): Operation {
         const a = this.generateRandom(level);
@@ -119,9 +163,9 @@ export class GameService {
             return;
         }
 
+        const enemies = this.currentEnemies;
         const correctAnswer =
             playerInput === currentState.currentOperation.result;
-
         const history: GameHistory[] = [
             ...currentState.history,
             {
@@ -137,6 +181,8 @@ export class GameService {
         if (!correctAnswer) {
             gameSpeed += this.speedPenalty;
             mistakes += 1;
+        } else {
+            enemies.shift(); // We defeated the enemy so we can remove
         }
 
         const currentOperation = this.generateOperation(currentState.level);
@@ -154,6 +200,31 @@ export class GameService {
             gameSpeed,
             currentOperation,
             status,
+            enemies,
         });
+    }
+
+    public addEnemy(beginS: number): void {
+        const updatedEnemies = this.currentEnemies;
+        updatedEnemies.push({
+            defeated: false,
+            beginS,
+        });
+
+        this.state$.next({
+            ...this.currentState,
+            enemies: updatedEnemies,
+        });
+    }
+
+    public changeGameStatus(status: GameStatus) {
+        this.state$.next({
+            ...this.currentState,
+            status,
+        });
+    }
+
+    public isFirstEnemy(beginS: number): boolean {
+        return this.currentEnemies.every((obj) => obj.beginS >= beginS);
     }
 }

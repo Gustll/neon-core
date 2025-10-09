@@ -10,6 +10,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { GameService } from '../../core/game.service';
+import { GameAnimationsComponent } from '../game-animations/game-animations.component';
 
 @Component({
     selector: 'app-game-layout',
@@ -19,12 +20,13 @@ import { GameService } from '../../core/game.service';
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        GameAnimationsComponent,
     ],
     templateUrl: './game-layout.component.html',
     styleUrl: './game-layout.component.scss',
     standalone: true,
 })
-export class GameLayoutComponent {
+export class GameLayoutComponent implements OnInit {
     private gameService = inject(GameService);
 
     public vm$ = this.gameService.vm$;
@@ -45,5 +47,6 @@ export class GameLayoutComponent {
         if (playerInput) {
             this.gameService.fireLaser(playerInput);
         }
+        this.gameForm.reset();
     }
 }

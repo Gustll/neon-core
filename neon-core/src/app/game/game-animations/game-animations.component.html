@@ -1,1 +1,75 @@
-<p>game-animations works!</p>
+<button (click)="fireLaser()">Fire</button>
+@if (vm$ | async; as gameState) {
+    {{ gameState.currentOperation | json }}
+    {{ gameState.enemies | json }}
+
+    <div class="ba b--black h-100 relative">
+        <svg
+            #game
+            class="w-100 h-100"
+            viewBox="0 0 100 100">
+            <!-- Ship Laser gun -->
+            <g transform="translate(45, 94) rotate(270)">
+                <!-- points defined pointing along +X; (0,0) is the triangle tip -->
+                <polygon
+                    points="0,0 -4,2.5 -4,-2.5"
+                    fill="blue" />
+            </g>
+
+            @if (laser$ | async; as laser) {
+                <line
+                    x1="45"
+                    y1="94"
+                    [attr.x2]="laser.targetX"
+                    [attr.y2]="laser.targetY"
+                    stroke="blue"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    vector-effect="non-scaling-stroke" />
+            }
+
+            <!-- ship line at 95% -->
+            <line
+                x1="0"
+                y1="95"
+                x2="100"
+                y2="95"
+                style="stroke: blue"></line>
+
+            <!-- Enemy path -->
+            <path
+                [attr.d]="enemyD"
+                fill="none"
+                stroke="red"
+                stroke-width="0.5"></path>
+
+            @for (enemy of gameState.enemies; track enemy) {
+                @if (!enemy.defeated) {
+                    <circle
+                        r="1.5"
+                        [attr.id]="
+                            isFirstEnemy(enemy.beginS) ? 'first-enemy' : ''
+                        "
+                        fill="red">
+                        <animateMotion
+                            [attr.path]="enemyD"
+                            repeatCount="1"
+                            [attr.dur]="cfg.pathDuration"
+                            [attr.begin]="enemy.beginS"
+                            (endEvent)="gameOver()" />
+                    </circle>
+                }
+            }
+        </svg>
+        <div class="game-text absolute">
+            @switch (gameState.status) {
+                @case (GameStatus.GameOver) {
+                    <span>YOU LOST</span>
+                }
+                @case (GameStatus.Won) {
+                    <span>YOU WON!</span>
+                }
+            }
+        </div>
+    </div>
+}

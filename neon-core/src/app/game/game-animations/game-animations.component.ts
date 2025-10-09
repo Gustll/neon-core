@@ -1,9 +1,114 @@
-import { Component } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    inject,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
+import {
+    GameService,
+    GameStatus,
+    Level,
+    LevelConfig,
+} from '../../core/game.service';
+import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
+
+interface Laser {
+    targetX: number;
+    targetY: number;
+}
 
 @Component({
     selector: 'app-game-animations',
-    imports: [],
+    imports: [CommonModule],
     templateUrl: './game-animations.component.html',
     styleUrl: './game-animations.component.scss',
 })
-export class GameAnimationsComponent {}
+export class GameAnimationsComponent implements OnInit {
+    @ViewChild('game', { static: false }) game!: ElementRef<SVGSVGElement>;
+
+    private gameService = inject(GameService);
+
+    private readonly SPAWN_MS = 500;
+
+    public GameStatus = GameStatus;
+    public vm$ = this.gameService.vm$;
+    public enemyD!: string;
+    public cfg!: LevelConfig;
+    public laser$ = new BehaviorSubject<Laser | null>(null);
+
+    ngOnInit(): void {
+        const level = 3;
+        this.cfg = this.gameService.getLevelConfig(level);
+        this.enemyD = this.levelPath(level);
+        this.animateGame();
+    }
+
+    private levelPath(level: Level): string {
+        switch (level) {
+            case 3:
+                return this.straighPath();
+
+            default:
+                return this.straighPath();
+        }
+    }
+
+    private straighPath(): string {
+        return `M 50 0 L 50 95`;
+    }
+
+    private animateGame(): void {
+        const gameIntervalId = setInterval(() => {
+            const beginS = (this.SPAWN_MS * this.gameService.enemyCount) / 1000;
+            this.gameService.addEnemy(beginS);
+
+            // We stop adding enemies once all have been added
+            if (this.gameService.enemyCount === this.cfg.operations) {
+                clearInterval(gameIntervalId);
+            }
+        }, this.SPAWN_MS);
+    }
+
+    public gameOver() {
+        this.gameService.changeGameStatus(GameStatus.GameOver);
+    }
+
+    public fireLaser() {
+        const svg = this.game?.nativeElement;
+        if (!svg) {
+            return;
+        }
+
+        const firstEnemy = svg.querySelector(
+            '#first-enemy',
+        ) as SVGGraphicsElement | null;
+        if (!firstEnemy) {
+            return;
+        } // No enemies
+
+        // 1) get its current animated box in screen pixels
+        const rect = firstEnemy.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        // 2) convert screen -> SVG user units (so it matches path/line coords)
+        const pt = svg.createSVGPoint();
+        pt.x = cx;
+        pt.y = cy;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) {
+            return;
+        }
+        const svgPt = pt.matrixTransform(ctm.inverse());
+
+        this.laser$.next({ targetX: svgPt.x, targetY: svgPt.y });
+
+        setTimeout(() => this.laser$.next(null), 150);
+    }
+
+    public isFirstEnemy(beginS: number): boolean {
+        return this.gameService.isFirstEnemy(beginS);
+    }
+}
