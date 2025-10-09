@@ -108,7 +108,7 @@ describe('GameService', () => {
             });
         });
 
-        it('', () => {
+        it('should correctly change the state of the game when the player Wins', () => {
             const fakeOp: Operation = {
                 a: 5,
                 b: 5,
