@@ -38,17 +38,18 @@ export class GameAnimationsComponent implements OnInit {
     public enemyD!: string;
     public cfg!: LevelConfig;
     public laser$ = new BehaviorSubject<Laser | null>(null);
+    public timestamp = Date.now();
+    public timeDelta!: number;
 
     ngOnInit(): void {
-        const level = 3;
+        const level = 1;
         this.cfg = this.gameService.getLevelConfig(level);
         this.enemyD = this.levelPath(level);
-        this.animateGame();
     }
 
     private levelPath(level: Level): string {
         switch (level) {
-            case 3:
+            case 1:
                 return this.straighPath();
 
             default:
@@ -60,19 +61,24 @@ export class GameAnimationsComponent implements OnInit {
         return `M 50 0 L 50 95`;
     }
 
-    private animateGame(): void {
+    public animateGame(): void {
+        this.gameService.addEnemy(0);
+
         const gameIntervalId = setInterval(() => {
             const beginS = (this.SPAWN_MS * this.gameService.enemyCount) / 1000;
             this.gameService.addEnemy(beginS);
 
             // We stop adding enemies once all have been added
-            if (this.gameService.enemyCount === this.cfg.operations) {
+            const totalEnemiesAdded =
+                this.gameService.totalDefeatedEnemies +
+                this.gameService.enemyCount;
+            if (totalEnemiesAdded === this.cfg.operations) {
                 clearInterval(gameIntervalId);
             }
         }, this.SPAWN_MS);
     }
 
-    public gameOver() {
+    public gameOver(): void {
         this.gameService.changeGameStatus(GameStatus.GameOver);
     }
 
@@ -110,7 +116,7 @@ export class GameAnimationsComponent implements OnInit {
 
         this.laser$.next({ targetX: svgPt.x, targetY: svgPt.y, color });
 
-        setTimeout(() => this.laser$.next(null), 150);
+        setTimeout(() => this.laser$.next(null), 250);
     }
 
     public isFirstEnemy(beginS: number): boolean {

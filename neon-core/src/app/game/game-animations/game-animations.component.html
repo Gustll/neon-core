@@ -1,7 +1,4 @@
 @if (vm$ | async; as gameState) {
-    {{ gameState.currentOperation | json }}
-    {{ gameState.enemies | json }}
-
     <div class="ba b--black h-100 relative">
         <svg
             #game
@@ -17,58 +14,49 @@
 
             @if (laser$ | async; as laser) {
                 <line
+                    [attr.style]="'color:' + laser.color"
+                    class="neon"
                     x1="45"
                     y1="94"
                     [attr.x2]="laser.targetX"
                     [attr.y2]="laser.targetY"
                     [attr.stroke]="laser.color"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    vector-effect="non-scaling-stroke" />
+                    stroke-width="2" />
             }
-
-            <!-- ship line at 95% -->
-            <line
-                x1="0"
-                y1="95"
-                x2="100"
-                y2="95"
-                style="stroke: blue"></line>
 
             <!-- Enemy path -->
             <path
+                style="color: #ff3b3b"
+                class="neon neon-pulse"
                 [attr.d]="enemyD"
                 fill="none"
                 stroke="red"
                 stroke-width="0.5"></path>
 
+            <!-- ship line at 95% -->
+            <line
+                class="neon"
+                style="color: blue"
+                x1="0"
+                y1="95"
+                x2="100"
+                y2="95"></line>
+
             @for (enemy of gameState.enemies; track enemy) {
-                @if (!enemy.defeated) {
-                    <circle
-                        r="1.5"
-                        [attr.id]="
-                            isFirstEnemy(enemy.beginS) ? 'first-enemy' : ''
-                        "
-                        fill="red">
-                        <animateMotion
-                            [attr.path]="enemyD"
-                            repeatCount="1"
-                            [attr.dur]="cfg.pathDuration"
-                            [attr.begin]="enemy.beginS"
-                            (endEvent)="gameOver()" />
-                    </circle>
-                }
+                <circle
+                    r="1.5"
+                    [attr.id]="isFirstEnemy(enemy.beginS) ? 'first-enemy' : ''"
+                    fill="none"
+                    stroke-width="0.5"
+                    stroke="red">
+                    <animateMotion
+                        [attr.path]="enemyD"
+                        repeatCount="1"
+                        [attr.dur]="cfg.pathDuration"
+                        begin="4"
+                        (endEvent)="gameOver()" />
+                </circle>
             }
         </svg>
-        <div class="game-text absolute">
-            @switch (gameState.status) {
-                @case (GameStatus.GameOver) {
-                    <span>YOU LOST</span>
-                }
-                @case (GameStatus.Won) {
-                    <span>YOU WON!</span>
-                }
-            }
-        </div>
     </div>
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { GameService } from '../../core/game.service';
+import { GameService, GameStatus } from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
 
 @Component({
@@ -26,10 +26,11 @@ import { GameAnimationsComponent } from '../game-animations/game-animations.comp
     styleUrl: './game-layout.component.scss',
     standalone: true,
 })
-export class GameLayoutComponent implements OnInit {
+export class GameLayoutComponent implements AfterViewInit {
     @ViewChild('game') game!: GameAnimationsComponent;
     private gameService = inject(GameService);
 
+    public GameStatus = GameStatus;
     public vm$ = this.gameService.vm$;
     public gameForm = new FormGroup({
         playerInput: new FormControl<number | null>(null, {
@@ -38,9 +39,17 @@ export class GameLayoutComponent implements OnInit {
         }),
     });
 
-    ngOnInit(): void {
-        // TODO : change so we get the level based on the game setup
-        this.gameService.startGame(1);
+    public countdown: string = '';
+
+    ngAfterViewInit(): void {
+        const level = 1;
+
+        Promise.resolve().then(() => {
+            const unpauseDelayMs = 4000;
+            this.startCountdown(unpauseDelayMs);
+            this.gameService.unpauseGame(level, unpauseDelayMs);
+            setTimeout(() => this.game.animateGame(), unpauseDelayMs);
+        });
     }
 
     public fireLaser() {
@@ -50,5 +59,21 @@ export class GameLayoutComponent implements OnInit {
             this.gameService.fireLaser(playerInput);
         }
         this.gameForm.reset();
+    }
+
+    private startCountdown(unpauseDelayMs: number) {
+        let counter = unpauseDelayMs / 1000 - 1;
+        this.countdown = '3';
+        const countdownInterval = setInterval(() => {
+            if (counter === 1) {
+                this.countdown = 'START!';
+                counter -= 1;
+            } else if (counter > 0) {
+                this.countdown = `${counter - 1}`;
+                counter -= 1;
+            } else {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
     }
 }

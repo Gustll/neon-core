@@ -27,7 +27,7 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
         minRange: 1,
         maxRange: 50,
         operations: 3,
-        pathDuration: 10,
+        pathDuration: 15,
     },
 };
 
@@ -50,6 +50,7 @@ export interface GameHistory {
 
 export enum GameStatus {
     Paused = 'Paused',
+    Resumed = 'Resumed',
     Running = 'Running',
     Won = 'Won',
     GameOver = 'GameOver',
@@ -60,7 +61,7 @@ interface Enemy {
     beginS: number;
 }
 
-interface GameState {
+export interface GameState {
     status: GameStatus;
     level: Level | null;
     history: GameHistory[];
@@ -97,12 +98,26 @@ export class GameService {
         return this.currentState.enemies;
     }
 
+    get gameHistory(): GameHistory[] {
+        return this.currentState.history;
+    }
+
     get enemyCount(): number {
         return this.currentEnemies.length;
     }
 
+    get totalDefeatedEnemies(): number {
+        return this.gameHistory.length - this.currentState.mistakes;
+    }
+
     public getLevelConfig(level: Level): LevelConfig {
         return LEVEL_CONFIG[level];
+    }
+
+    // We unpause the game in 3s
+    public unpauseGame(level: Level, delay: number): void {
+        this.changeGameStatus(GameStatus.Resumed);
+        setTimeout(() => this.startGame(level), delay);
     }
 
     public startGame(level: Level): void {
@@ -182,6 +197,9 @@ export class GameService {
     }
 
     public addEnemy(beginS: number): void {
+        if (this.currentState.status !== GameStatus.Running) {
+            return;
+        }
         const updatedEnemies = this.currentEnemies;
         updatedEnemies.push({
             defeated: false,

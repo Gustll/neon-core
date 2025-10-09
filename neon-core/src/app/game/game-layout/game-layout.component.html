@@ -1,24 +1,28 @@
 @if (vm$ | async; as gameState) {
     <div class="game-layout w-100 h-100 center pa3">
         <div class="flex flex-column flex-row-l h-100">
-            <aside class="w-100 w-20-l pr3">
+            <aside class="w-100 w-20-l pa3">
                 <!-- Controls -->
+
+                {{ gameState.status }}
+                {{ gameState.enemies | json }}
 
                 <form
                     [formGroup]="gameForm"
-                    class="w-100 flex flex-column">
+                    class="w-100 flex flex-column pb3">
                     <mat-form-field
                         appearance="outline"
                         class="measure-wide">
                         <mat-label>Answer</mat-label>
                         <input
+                            autocomplete="off"
                             matInput
                             type="number"
                             formControlName="playerInput"
                             name="playerInput" />
                     </mat-form-field>
                     <button
-                        class="flex-auto"
+                        class="flex-auto br b--silver"
                         type="button"
                         mat-flat-button
                         [disabled]="!gameForm.valid"
@@ -31,7 +35,28 @@
                 <div>History</div>
             </aside>
 
-            <main class="w-100 w-80-l">
+            <main class="w-100 w-80-l relative">
+                <div
+                    class="absolute z-999 bg-black-50 white pa3 w-40 center top-20 operation-container h-auto f1 tc">
+                    <span class="neon">
+                        @switch (gameState.status) {
+                            @case (GameStatus.Running) {
+                                {{ gameState.currentOperation?.a }} +
+                                {{ gameState.currentOperation?.b }} =
+                            }
+                            @case (GameStatus.Won) {
+                                WINNER!
+                            }
+                            @case (GameStatus.GameOver) {
+                                GAME OVER!
+                            }
+                            @case (GameStatus.Resumed) {
+                                {{ countdown }}
+                            }
+                        }
+                    </span>
+                </div>
+
                 <app-game-animations #game></app-game-animations>
             </main>
         </div>
