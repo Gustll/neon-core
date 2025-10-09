@@ -18,24 +18,24 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
     5: { gameSpeed: 2, minRange: 50, maxRange: 150, operations: 150 },
 };
 
-enum Operator {
+export enum Operator {
     Addition = 'Addition',
 }
 
-interface Operation {
+export interface Operation {
     a: number;
     b: number;
     result: number;
     operator: Operator;
 }
 
-interface GameHistory {
+export interface GameHistory {
     attempt: number;
     operation: Operation;
     playerInput: number;
 }
 
-enum GameStatus {
+export enum GameStatus {
     Idle = 'idle',
     Running = 'running',
     Won = 'won',
@@ -71,7 +71,7 @@ export class GameService {
 
     public currentOperation!: Operation;
     public score: number = 0;
-    public attempt: number = 0;
+    public speedPenalty = 0.1;
 
     constructor() {}
 
@@ -125,7 +125,7 @@ export class GameService {
         const history: GameHistory[] = [
             ...currentState.history,
             {
-                attempt: this.attempt,
+                attempt: currentState.history.length + 1,
                 operation: currentState.currentOperation,
                 playerInput,
             },
@@ -135,14 +135,14 @@ export class GameService {
         let gameSpeed = currentState.gameSpeed;
 
         if (!correctAnswer) {
-            gameSpeed += 0.1;
+            gameSpeed += this.speedPenalty;
             mistakes += 1;
         }
 
         const currentOperation = this.generateOperation(currentState.level);
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
-            currentState.history.length + 1 - mistakes ===
+            history.length - mistakes ===
             LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
@@ -155,7 +155,5 @@ export class GameService {
             currentOperation,
             status,
         });
-
-        //this.currentOperation = this.generateOperation()
     }
 }
