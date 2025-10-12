@@ -13,6 +13,7 @@ import {
 } from '../../core/game.service';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 interface Laser {
     targetX: number;
@@ -31,8 +32,6 @@ export class GameAnimationsComponent implements OnInit {
 
     private gameService = inject(GameService);
 
-    private readonly SPAWN_MS = 500;
-
     public GameStatus = GameStatus;
     public vm$ = this.gameService.vm$;
     public enemyD!: string;
@@ -44,8 +43,11 @@ export class GameAnimationsComponent implements OnInit {
     private spawnIntervalMs!: number;
     public svgLoadTimeDelta = 0;
 
+    constructor(private route: ActivatedRoute) {}
     ngOnInit(): void {
-        const level = 1;
+        const level = this.route.snapshot.queryParamMap.get('level')
+            ? (Number(this.route.snapshot.queryParamMap.get('level')) as Level)
+            : 1;
         this.cfg = this.gameService.getLevelConfig(level);
         this.enemyD = this.levelPath(level);
         this.spawnIntervalMs = this.generateSpawnIntervalMs();

@@ -36,7 +36,12 @@
             <!-- ship line at 95% -->
             <line
                 class="neon"
-                style="color: blue"
+                [ngStyle]="{
+                    color:
+                        gameState.status !== GameStatus.GameOver
+                            ? 'blue'
+                            : 'red',
+                }"
                 x1="0"
                 y1="95"
                 x2="100"

@@ -1,1 +1,52 @@
-<p>game-setup works!</p>
+<div class="flex flex-column justify-center items-center pa3">
+    <p
+        class="f1 blue neon game-title"
+        style="color: blue">
+        NEON CORE
+    </p>
+    <p class="white neon">The grid is live. The Core is fading.</p>
+    <p class="white neon">
+        Protect it, dodge the clutter, and take the clean shots.
+    </p>
+    <p class="white neon">
+        Rules are simple: save the Neon Core and shoot
+        <span
+            class="blue neon"
+            style="color: blue">
+            BLUE
+        </span>
+        , not
+        <span
+            class="red neon"
+            style="color: red">
+            RED
+        </span>
+        !
+    </p>
+
+    <p class="neon white f2">Select level:</p>
+
+    <mat-button-toggle-group
+        class="white neon mb3"
+        style="color: red"
+        hideSingleSelectionIndicator
+        [formControl]="levelControl"
+        flat
+        name="level"
+        aria-label="Select difficulty level">
+        <mat-button-toggle [value]="1">Level 1</mat-button-toggle>
+        <mat-button-toggle [value]="2">Level 2</mat-button-toggle>
+        <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="mt3">
+        <button
+            mat-flat-button
+            style="color: blue"
+            color="white neon"
+            (click)="play()"
+            [disabled]="!levelControl.valid">
+            Play
+        </button>
+    </div>
+</div>

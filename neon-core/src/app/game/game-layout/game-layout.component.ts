@@ -9,9 +9,10 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { GameService, GameStatus } from '../../core/game.service';
+import { GameService, GameStatus, Level } from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
 import { GameHistoryComponent } from '../game-history/game-history.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-game-layout',
@@ -43,8 +44,12 @@ export class GameLayoutComponent implements AfterViewInit {
 
     public countdown: string = '';
 
+    constructor(private route: ActivatedRoute) {}
     ngAfterViewInit(): void {
-        const level = 1;
+        // TODO - using a typeguard here would be much better as we should not be casting like this...
+        const level = this.route.snapshot.queryParamMap.get('level')
+            ? (Number(this.route.snapshot.queryParamMap.get('level')) as Level)
+            : 1;
 
         Promise.resolve().then(() => {
             const unpauseDelayMs = 4000;

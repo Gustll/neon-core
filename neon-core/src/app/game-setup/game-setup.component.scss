@@ -1,0 +1,14 @@
+:host {
+    .game-title {
+        animation: zoomPulse 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes zoomPulse {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.12);
+        }
+    }
+}

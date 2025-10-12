@@ -27,7 +27,7 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
         minRange: 1,
         maxRange: 50,
         operations: 30,
-        pathDurationMs: 15000,
+        pathDurationMs: 16000,
     },
 };
 
@@ -166,13 +166,13 @@ export class GameService {
         const enemies = this.currentEnemies;
         const playerCorrect = this.isInputCorrect(playerInput);
         const history: GameHistory[] = [
-            ...currentState.history,
             {
                 attempt: currentState.history.length + 1,
                 operation: currentState.currentOperation,
                 playerInput,
                 playerCorrect,
             },
+            ...currentState.history,
         ];
 
         let mistakes = currentState.mistakes;
@@ -217,10 +217,18 @@ export class GameService {
     }
 
     public changeGameStatus(status: GameStatus) {
-        this.state$.next({
-            ...this.currentState,
-            status,
-        });
+        if (status === GameStatus.GameOver) {
+            this.state$.next({
+                ...this.currentState,
+                status,
+                enemies: [],
+            });
+        } else {
+            this.state$.next({
+                ...this.currentState,
+                status,
+            });
+        }
     }
 
     public isFirstEnemy(beginMs: number): boolean {
