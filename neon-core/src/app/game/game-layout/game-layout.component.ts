@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { GameService, GameStatus } from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
-import { GameHistoryComponent } from "../game-history/game-history.component";
+import { GameHistoryComponent } from '../game-history/game-history.component';
 
 @Component({
     selector: 'app-game-layout',
@@ -22,7 +22,7 @@ import { GameHistoryComponent } from "../game-history/game-history.component";
         MatInputModule,
         MatButtonModule,
         GameAnimationsComponent,
-        GameHistoryComponent
+        GameHistoryComponent,
     ],
     templateUrl: './game-layout.component.html',
     styleUrl: './game-layout.component.scss',
@@ -50,7 +50,7 @@ export class GameLayoutComponent implements AfterViewInit {
             const unpauseDelayMs = 4000;
             this.startCountdown(unpauseDelayMs);
             this.gameService.unpauseGame(level, unpauseDelayMs);
-            setTimeout(() => this.game.drawEnemies(), unpauseDelayMs);
+            setTimeout(() => this.game.animateGame(), unpauseDelayMs);
         });
     }
 

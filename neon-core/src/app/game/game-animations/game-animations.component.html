@@ -45,16 +45,15 @@
             @for (enemy of gameState.enemies; track enemy) {
                 <circle
                     [attr.r]="r"
-                    [attr.id]="isFirstEnemy(enemy.beginS) ? 'first-enemy' : ''"
+                    [attr.id]="isFirstEnemy(enemy.beginMs) ? 'first-enemy' : ''"
                     fill="none"
                     stroke-width="0.5"
                     stroke="red">
                     <animateMotion
                         [attr.path]="enemyD"
                         repeatCount="1"
-                        [attr.dur]="cfg.pathDuration + 's'"
-                        [attr.begin]="enemy.beginS + 's'"
-                        (endEvent)="gameOver()" />
+                        [attr.dur]="cfg.pathDurationMs + 'ms'"
+                        [attr.begin]="enemy.beginMs + 'ms'" />
                 </circle>
             }
         </svg>

@@ -8,12 +8,9 @@ import { CommonModule } from '@angular/common';
     templateUrl: './game-history.component.html',
     styleUrl: './game-history.component.scss',
     standalone: true,
-    host: { 'class': 'flex flex-auto w-100  overflow-y-auto' }
+    host: { class: 'flex flex-auto w-100  overflow-y-auto' },
 })
 export class GameHistoryComponent {
     private gameService = inject(GameService);
     public vm$ = this.gameService.vm$;
-
-
-
 }

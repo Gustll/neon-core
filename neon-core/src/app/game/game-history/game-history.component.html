@@ -1,25 +1,31 @@
 @if (vm$ | async; as gameState) {
-            <div class="flex flex-column w-100">
-                @for (history of gameState.history; track $index) {
-                    <div class="flex flex-wrap mb3 pv2 br4 white-90 f4 ba" [ngClass]="history.playerCorrect ? 'b--blue' : 'b--red'">
-                        <div class="w-60">
-                          <div class="pl3 neon"> {{ history.operation.a }} + {{ history.operation.b }} = </div>
-                        </div>
-                        <div class="w-20 tc" [ngClass]="history.playerCorrect ? 'white' : 'red'">
-                          <div>{{ history.playerInput }}</div>
-                        </div>
-                        @if (!history.playerCorrect) {
-                            <div class="w-20 tc blue neon">
-                                <div class="">{{ history.operation.result }}</div>
-                              </div>
-                        }
-            
-                        <div class="w-100 tc pt2 neon" [ngClass]="history.playerCorrect ? 'white' : 'red'">
-                            {{history.playerCorrect ? 'CORRECT!' : 'WRONG!' }}
-                        </div>
-                       
-                      </div>
-                    
+    <div class="flex flex-column w-100">
+        @for (history of gameState.history; track $index) {
+            <div
+                class="flex flex-wrap mb3 pv2 br4 white-90 f4 ba"
+                [ngClass]="history.playerCorrect ? 'b--blue' : 'b--red'">
+                <div class="w-60">
+                    <div class="pl3 neon">
+                        {{ history.operation.a }} + {{ history.operation.b }} =
+                    </div>
+                </div>
+                <div
+                    class="w-20 tc"
+                    [ngClass]="history.playerCorrect ? 'white' : 'red'">
+                    <div>{{ history.playerInput }}</div>
+                </div>
+                @if (!history.playerCorrect) {
+                    <div class="w-20 tc blue neon">
+                        <div class="">{{ history.operation.result }}</div>
+                    </div>
                 }
-</div>
+
+                <div
+                    class="w-100 tc pt2 neon"
+                    [ngClass]="history.playerCorrect ? 'white' : 'red'">
+                    {{ history.playerCorrect ? 'CORRECT!' : 'WRONG!' }}
+                </div>
+            </div>
+        }
+    </div>
 }

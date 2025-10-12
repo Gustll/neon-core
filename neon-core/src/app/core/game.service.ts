@@ -7,7 +7,7 @@ export interface LevelConfig {
     minRange: number;
     maxRange: number;
     operations: number; // Count of enemies
-    pathDuration: number;
+    pathDurationMs: number;
 }
 
 export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
@@ -15,19 +15,19 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
         minRange: 1,
         maxRange: 10,
         operations: 10,
-        pathDuration: 20,
+        pathDurationMs: 20000,
     },
     2: {
         minRange: 1,
         maxRange: 10,
         operations: 20,
-        pathDuration: 18,
+        pathDurationMs: 18000,
     },
     3: {
         minRange: 1,
         maxRange: 50,
         operations: 30,
-        pathDuration: 15,
+        pathDurationMs: 15000,
     },
 };
 
@@ -58,7 +58,7 @@ export enum GameStatus {
 }
 
 interface Enemy {
-    beginS: number;
+    beginMs: number;
 }
 
 export interface GameState {
@@ -95,7 +95,7 @@ export class GameService {
     }
 
     get currentStatus(): GameStatus {
-        return this.currentState.status
+        return this.currentState.status;
     }
 
     get currentEnemies(): Enemy[] {
@@ -171,7 +171,7 @@ export class GameService {
                 attempt: currentState.history.length + 1,
                 operation: currentState.currentOperation,
                 playerInput,
-                playerCorrect
+                playerCorrect,
             },
         ];
 
@@ -187,7 +187,7 @@ export class GameService {
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
             history.length - mistakes ===
-                LEVEL_CONFIG[currentState.level].operations
+            LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
 
@@ -201,13 +201,13 @@ export class GameService {
         });
     }
 
-    public addEnemy(beginS: number): void {
+    public addEnemy(beginMs: number): void {
         if (this.currentState.status !== GameStatus.Running) {
             return;
         }
         const updatedEnemies = this.currentEnemies;
         updatedEnemies.push({
-            beginS,
+            beginMs,
         });
 
         this.state$.next({
@@ -223,8 +223,8 @@ export class GameService {
         });
     }
 
-    public isFirstEnemy(beginS: number): boolean {
-        return this.currentEnemies.every((obj) => obj.beginS >= beginS);
+    public isFirstEnemy(beginMs: number): boolean {
+        return this.currentEnemies.every((obj) => obj.beginMs >= beginMs);
     }
 
     public isInputCorrect(playerInput: number): boolean {

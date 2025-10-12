@@ -41,20 +41,21 @@ export class GameAnimationsComponent implements OnInit {
     public timestamp = Date.now();
     public timeDelta!: number;
     public r: number = 1.5;
-    private spawnIntervalS!: number;
+    private spawnIntervalMs!: number;
+    public svgLoadTimeDelta = 0;
 
     ngOnInit(): void {
         const level = 1;
         this.cfg = this.gameService.getLevelConfig(level);
         this.enemyD = this.levelPath(level);
-        this.spawnIntervalS = this.generateSpawnIntervalS();
+        this.spawnIntervalMs = this.generateSpawnIntervalMs();
     }
 
-    public generateSpawnIntervalS(): number {
+    public generateSpawnIntervalMs(): number {
         const gap = 0;
         const L = this.pathLengthFromD(this.enemyD);
-        const T = this.cfg.pathDuration; // seconds
-        return T * (2 * this.r + gap) / L;
+        const T = this.cfg.pathDurationMs; // ms
+        return (T * (2 * this.r + gap)) / L;
     }
 
     private pathLengthFromD(d: string): number {
@@ -78,19 +79,46 @@ export class GameAnimationsComponent implements OnInit {
         return `M 50 0 L 50 95`;
     }
 
-    public drawEnemies(): void {
-        const gameIntervalId = setInterval(() => {
-            const beginS = this.spawnIntervalS * this.gameService.enemyCount;
-            this.gameService.addEnemy(beginS);
+    public animateGame(): void {
+        this.drawEnemies();
+        this.animateEnemies();
+    }
 
-            // We stop adding enemies once all have been added
-            const totalEnemiesAdded =
-                this.gameService.totalDefeatedEnemies +
-                this.gameService.enemyCount;
-            if (totalEnemiesAdded === this.cfg.operations || this.gameService.currentStatus !== GameStatus.Running) {
-                clearInterval(gameIntervalId);
+    public drawEnemies(): void {
+        const totalEnemies = this.cfg.operations;
+        this.svgLoadTimeDelta = Date.now() - this.timestamp;
+
+        for (let enemyCount = 0; enemyCount < totalEnemies; enemyCount++) {
+            // The svg loads faster than we start the game so we need to offset the begin of circle load for the time duration
+            const beginMs =
+                this.spawnIntervalMs * this.gameService.enemyCount +
+                this.svgLoadTimeDelta;
+            this.gameService.addEnemy(beginMs);
+        }
+    }
+
+    public animateEnemies(): void {
+        const now = Date.now();
+        const timeDelta = now - this.timestamp;
+
+        const enemies = this.gameService.currentEnemies;
+
+        if (
+            enemies.length > 0 &&
+            this.gameService.currentStatus === GameStatus.Running
+        ) {
+            const leader = enemies[0];
+            const leaderBeginMS = leader.beginMs;
+            const leaderTimeDelta = timeDelta - leaderBeginMS;
+
+            if (leaderTimeDelta >= this.cfg.pathDurationMs) {
+                this.gameOver();
+            } else {
+                window.requestAnimationFrame(() => {
+                    this.animateEnemies();
+                });
             }
-        }, 10);
+        }
     }
 
     public gameOver(): void {
