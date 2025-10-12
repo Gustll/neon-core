@@ -14,6 +14,7 @@
                             autocomplete="off"
                             matInput
                             type="number"
+                            (keydown.enter)="gameForm.valid && fireLaser()"
                             formControlName="playerInput"
                             name="playerInput" />
                     </mat-form-field>

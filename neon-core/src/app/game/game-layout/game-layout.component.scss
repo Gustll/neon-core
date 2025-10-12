@@ -16,4 +16,16 @@
             /* medium glow */ 0 0 32px blue,
             /* outer glow */ 0 0 64px blue;
     }
+
+    .mat-mdc-form-field .mat-mdc-input-element {
+        color: #fff;
+        caret-color: #fff;
+    }
+    .mat-mdc-form-field .mat-mdc-input-element::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    /* Label (floating & resting) */
+    .mat-mdc-form-field .mdc-floating-label {
+        color: rgba(255, 255, 255, 0.7);
+    }
 }

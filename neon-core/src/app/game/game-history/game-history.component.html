@@ -1,6 +1,6 @@
 @if (vm$ | async; as gameState) {
     <div class="flex flex-column w-100">
-        @for (history of gameState.history; track $index) {
+        @for (history of gameState.history.reverse(); track $index) {
             <div
                 class="flex flex-wrap mb3 pv2 br4 white-90 f4 ba"
                 [ngClass]="history.playerCorrect ? 'b--blue' : 'b--red'">
