@@ -48,7 +48,7 @@ export class GameLayoutComponent implements AfterViewInit {
             const unpauseDelayMs = 4000;
             this.startCountdown(unpauseDelayMs);
             this.gameService.unpauseGame(level, unpauseDelayMs);
-            setTimeout(() => this.game.animateGame(), unpauseDelayMs);
+            setTimeout(() => this.game.drawEnemies(), unpauseDelayMs);
         });
     }
 

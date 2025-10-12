@@ -57,7 +57,6 @@ export enum GameStatus {
 }
 
 interface Enemy {
-    defeated: boolean;
     beginS: number;
 }
 
@@ -92,6 +91,10 @@ export class GameService {
 
     get currentState(): GameState {
         return this.state$.value;
+    }
+
+    get currentStatus(): GameStatus {
+        return this.currentState.status
     }
 
     get currentEnemies(): Enemy[] {
@@ -202,7 +205,6 @@ export class GameService {
         }
         const updatedEnemies = this.currentEnemies;
         updatedEnemies.push({
-            defeated: false,
             beginS,
         });
 

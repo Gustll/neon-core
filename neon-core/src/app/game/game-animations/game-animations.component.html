@@ -44,7 +44,7 @@
 
             @for (enemy of gameState.enemies; track enemy) {
                 <circle
-                    r="1.5"
+                    [attr.r]="r"
                     [attr.id]="isFirstEnemy(enemy.beginS) ? 'first-enemy' : ''"
                     fill="none"
                     stroke-width="0.5"
@@ -52,8 +52,8 @@
                     <animateMotion
                         [attr.path]="enemyD"
                         repeatCount="1"
-                        [attr.dur]="cfg.pathDuration"
-                        begin="4"
+                        [attr.dur]="cfg.pathDuration + 's'"
+                        [attr.begin]="enemy.beginS + 's'"
                         (endEvent)="gameOver()" />
                 </circle>
             }
