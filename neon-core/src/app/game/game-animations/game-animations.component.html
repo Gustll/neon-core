@@ -1,5 +1,5 @@
 @if (vm$ | async; as gameState) {
-    <div class="ba b--black h-100 relative">
+    <div class="h-100 relative">
         <svg
             #game
             class="w-100 h-100"
@@ -26,7 +26,7 @@
 
             <!-- Enemy path -->
             <path
-                style="color: #ff3b3b"
+                style="color: red"
                 class="neon neon-pulse"
                 [attr.d]="enemyD"
                 fill="none"

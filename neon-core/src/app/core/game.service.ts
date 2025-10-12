@@ -14,19 +14,19 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
     1: {
         minRange: 1,
         maxRange: 10,
-        operations: 3,
+        operations: 10,
         pathDuration: 20,
     },
     2: {
         minRange: 1,
         maxRange: 10,
-        operations: 30,
+        operations: 20,
         pathDuration: 18,
     },
     3: {
         minRange: 1,
         maxRange: 50,
-        operations: 3,
+        operations: 30,
         pathDuration: 15,
     },
 };
@@ -46,6 +46,7 @@ export interface GameHistory {
     attempt: number;
     operation: Operation;
     playerInput: number;
+    playerCorrect: boolean;
 }
 
 export enum GameStatus {
@@ -163,19 +164,20 @@ export class GameService {
         }
 
         const enemies = this.currentEnemies;
-        const correctAnswer = this.isInputCorrect(playerInput);
+        const playerCorrect = this.isInputCorrect(playerInput);
         const history: GameHistory[] = [
             ...currentState.history,
             {
                 attempt: currentState.history.length + 1,
                 operation: currentState.currentOperation,
                 playerInput,
+                playerCorrect
             },
         ];
 
         let mistakes = currentState.mistakes;
 
-        if (!correctAnswer) {
+        if (!playerCorrect) {
             mistakes += 1;
         } else {
             enemies.shift(); // We defeated the enemy so we can remove
@@ -185,7 +187,7 @@ export class GameService {
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
             history.length - mistakes ===
-            LEVEL_CONFIG[currentState.level].operations
+                LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
 

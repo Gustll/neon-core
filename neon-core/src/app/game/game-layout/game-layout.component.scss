@@ -2,13 +2,18 @@
     .game-layout {
         max-width: 1920px;
     }
-    aside {
-        background-color: white;
-    }
 
     .operation-container {
         left: 50%;
         transform: translate(-50%, 0);
         backdrop-filter: blur(5px);
+    }
+
+    aside {
+        box-shadow:
+            0 0 6px blue,
+            /* tight glow */ 0 0 16px blue,
+            /* medium glow */ 0 0 32px blue,
+            /* outer glow */ 0 0 64px blue;
     }
 }

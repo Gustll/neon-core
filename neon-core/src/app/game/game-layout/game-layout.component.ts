@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { GameService, GameStatus } from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
+import { GameHistoryComponent } from "../game-history/game-history.component";
 
 @Component({
     selector: 'app-game-layout',
@@ -21,6 +22,7 @@ import { GameAnimationsComponent } from '../game-animations/game-animations.comp
         MatInputModule,
         MatButtonModule,
         GameAnimationsComponent,
+        GameHistoryComponent
     ],
     templateUrl: './game-layout.component.html',
     styleUrl: './game-layout.component.scss',

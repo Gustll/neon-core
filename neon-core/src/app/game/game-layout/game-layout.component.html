@@ -1,12 +1,8 @@
 @if (vm$ | async; as gameState) {
     <div class="game-layout w-100 h-100 center pa3">
         <div class="flex flex-column flex-row-l h-100">
-            <aside class="w-100 w-20-l pa3">
+            <aside class="w-100 w-20-l pa3 ba br4 flex flex-column">
                 <!-- Controls -->
-
-                {{ gameState.status }}
-                {{ gameState.enemies | json }}
-
                 <form
                     [formGroup]="gameForm"
                     class="w-100 flex flex-column pb3">
@@ -32,7 +28,8 @@
                 </form>
 
                 <!-- History -->
-                <div>History</div>
+                <p class="f3 neon white">History</p>
+                    <app-game-history></app-game-history>
             </aside>
 
             <main class="w-100 w-80-l relative">
