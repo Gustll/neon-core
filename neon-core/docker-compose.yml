@@ -8,9 +8,3 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    networks:
-      - neon
-
-networks:
-  neon:
-    external: true

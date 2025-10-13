@@ -6,8 +6,16 @@ import { Router } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { EnemyPathService } from '../core/enemy-path-service';
-import { distinctUntilChanged, filter, map, Observable, startWith } from 'rxjs';
+import {
+    distinctUntilChanged,
+    filter,
+    map,
+    Observable,
+    startWith,
+    tap,
+} from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { SoundService } from '../core/sound-service';
 
 @Component({
     selector: 'app-game-setup',
@@ -30,11 +38,13 @@ export class GameSetupComponent {
         private router: Router,
         private access: GameAccessService,
         private pathService: EnemyPathService,
+        private soundService: SoundService,
     ) {
         this.enemyD$ = this.levelControl.valueChanges.pipe(
             startWith(this.levelControl.value),
             distinctUntilChanged(),
             filter((level) => level !== null),
+            tap(() => this.soundService.play('levelChange')),
             map((level: Level) => {
                 return this.pathService.levelPath(level);
             }),

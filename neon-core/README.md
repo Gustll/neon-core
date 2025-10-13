@@ -2,6 +2,12 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) 
 
+### Browser Support
+Chrome ✅
+Firefox ✅
+Edge ✅
+Safari ❌ (not supported, please use another browser -> for now)
+
 ### Prerequisites
 Before running the project locally (without docker), ensure you have:
 - Node.js 22+
@@ -45,10 +51,6 @@ npm run build
 ```
 
 ### Runnin with docker
-Create the docker network 'neon'
-```
-docker network create -d bridge neon
-```
 Navigate to the project
 
 ```

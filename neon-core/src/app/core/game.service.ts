@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SoundService } from './sound-service';
 
 export type Level = 1 | 2 | 3;
 
@@ -74,6 +75,8 @@ export interface GameState {
     providedIn: 'root',
 })
 export class GameService {
+    constructor(private soundService: SoundService) {}
+
     private initialState: GameState = {
         status: GameStatus.Paused,
         level: null,
@@ -217,7 +220,13 @@ export class GameService {
     }
 
     public changeGameStatus(status: GameStatus) {
+        if (status === GameStatus.Won) {
+            this.soundService.stop('music');
+            this.soundService.play('gameWon');
+        }
         if (status === GameStatus.GameOver) {
+            this.soundService.stop('music');
+            this.soundService.play('gameOver');
             this.state$.next({
                 ...this.currentState,
                 status,

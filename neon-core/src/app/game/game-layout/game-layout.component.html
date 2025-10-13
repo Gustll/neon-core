@@ -22,7 +22,10 @@
                         class="flex-auto neon"
                         type="button"
                         mat-flat-button
-                        [disabled]="!gameForm.valid"
+                        [disabled]="
+                            !gameForm.valid ||
+                            gameState.status !== GameStatus.Running
+                        "
                         (click)="fireLaser()">
                         Fire
                     </button>

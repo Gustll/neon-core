@@ -14,6 +14,7 @@ import { GameAnimationsComponent } from '../game-animations/game-animations.comp
 import { GameHistoryComponent } from '../game-history/game-history.component';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { SoundService } from '../../core/sound-service';
 
 interface PlayerFireNotification {
     text: string;
@@ -67,7 +68,10 @@ export class GameLayoutComponent implements AfterViewInit {
 
     public countdown: string = '';
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(
+        private route: ActivatedRoute,
+        private soundService: SoundService,
+    ) {}
     ngAfterViewInit(): void {
         // TODO - using a typeguard here would be much better as we should not be casting like this...
         const level = this.route.snapshot.queryParamMap.get('level')
@@ -87,6 +91,7 @@ export class GameLayoutComponent implements AfterViewInit {
         if (playerInput) {
             this.playerFireNotify(playerInput);
             this.game.animateLaser(playerInput);
+            this.soundService.play('fireLaser');
             this.gameService.fireLaser(playerInput);
         }
         this.gameForm.reset();
