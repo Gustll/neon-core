@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# on mac: /bin/bash
+# name this file pre-push
+# and place it in .git/hooks
+
+function fe-sph {
+    cd `git rev-parse --show-toplevel`
+
+    npm run lint
+    if [ $? != 0 ]; then
+        echo "push failed due to linter issues..."
+        exit 1
+    fi
+
+    npm run format-check
+    if [ $? != 0 ]; then
+        echo "push failed due to format issues..."
+        exit 1
+    fi
+}
+
+fe-sph &
+J1=$!
+
+wait $J1
