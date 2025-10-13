@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +9,16 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { GameService, GameStatus, Level } from '../../core/game.service';
+import {
+    GameService,
+    GameState,
+    GameStatus,
+    Level,
+} from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
 import { GameHistoryComponent } from '../game-history/game-history.component';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SoundService } from '../../core/sound-service';
 
 interface PlayerFireNotification {
@@ -53,10 +58,9 @@ export class GameLayoutComponent implements AfterViewInit {
         'Overheat.',
         'Try again.',
     ];
-    private gameService = inject(GameService);
 
     public GameStatus = GameStatus;
-    public vm$ = this.gameService.vm$;
+    public vm$!: Observable<GameState>;
     public gameForm = new FormGroup({
         playerInput: new FormControl<number | null>(null, {
             nonNullable: true,
@@ -71,7 +75,10 @@ export class GameLayoutComponent implements AfterViewInit {
     constructor(
         private route: ActivatedRoute,
         private soundService: SoundService,
-    ) {}
+        private gameService: GameService,
+    ) {
+        this.vm$ = this.gameService.vm$;
+    }
     ngAfterViewInit(): void {
         // TODO - using a typeguard here would be much better as we should not be casting like this...
         const level = this.route.snapshot.queryParamMap.get('level')
