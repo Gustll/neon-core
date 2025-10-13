@@ -36,4 +36,14 @@
         top: 15px;
         left: 5%;
     }
+
+    @media (max-width: 960px) {
+        .game-layout aside {
+            order: 2;
+        }
+
+        .game-layout main {
+            order: 1;
+        }
+    }
 }
