@@ -14,6 +14,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { EnemyPathService } from '../../core/enemy-path-service';
 
 interface Laser {
     targetX: number;
@@ -43,42 +44,14 @@ export class GameAnimationsComponent implements OnInit {
     private spawnIntervalMs!: number;
     public svgLoadTimeDelta = 0;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute, private pathService: EnemyPathService) {}
     ngOnInit(): void {
         const level = this.route.snapshot.queryParamMap.get('level')
             ? (Number(this.route.snapshot.queryParamMap.get('level')) as Level)
             : 1;
         this.cfg = this.gameService.getLevelConfig(level);
-        this.enemyD = this.levelPath(level);
-        this.spawnIntervalMs = this.generateSpawnIntervalMs();
-    }
-
-    public generateSpawnIntervalMs(): number {
-        const gap = 0;
-        const L = this.pathLengthFromD(this.enemyD);
-        const T = this.cfg.pathDurationMs; // ms
-        return (T * (2 * this.r + gap)) / L;
-    }
-
-    private pathLengthFromD(d: string): number {
-        const ns = 'http://www.w3.org/2000/svg';
-        const p = document.createElementNS(ns, 'path');
-        p.setAttribute('d', d);
-        return p.getTotalLength();
-    }
-
-    private levelPath(level: Level): string {
-        switch (level) {
-            case 1:
-                return this.straighPath();
-
-            default:
-                return this.straighPath();
-        }
-    }
-
-    private straighPath(): string {
-        return `M 50 0 L 50 95`;
+        this.enemyD = this.pathService.levelPath(level);
+        this.spawnIntervalMs = this.pathService.generateSpawnIntervalMs(level, this.cfg.pathDurationMs, this.r);
     }
 
     public animateGame(): void {

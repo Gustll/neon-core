@@ -1,14 +1,14 @@
 <div class="flex flex-column justify-center items-center pa3">
     <p
-        class="f1 blue neon game-title"
+        class="f1 blue neon game-title mb1 tc"
         style="color: blue">
         NEON CORE
     </p>
-    <p class="white neon">The grid is live. The Core is fading.</p>
-    <p class="white neon">
+    <p class="white neon tc">The grid is live. The Core is fading.</p>
+    <p class="white neon tc">
         Protect it, dodge the clutter, and take the clean shots.
     </p>
-    <p class="white neon">
+    <p class="white neon tc">
         Rules are simple: save the Neon Core and shoot
         <span
             class="blue neon"
@@ -24,7 +24,7 @@
         !
     </p>
 
-    <p class="neon white f2">Select level:</p>
+    <p class="neon white f2 mt3">Select level:</p>
 
     <mat-button-toggle-group
         class="white neon mb3"
@@ -38,6 +38,33 @@
         <mat-button-toggle [value]="2">Level 2</mat-button-toggle>
         <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
     </mat-button-toggle-group>
+
+    <div
+        class="ba b--red enemy-path-container">
+        <svg
+            #game
+            class="w-100 h-100"
+            viewBox="0 0 100 100">
+            <!-- Enemy path -->
+             @if (enemyD$ | async; as enemyD) {
+                <path
+                style="color: red"
+                class="neon neon-pulse"
+                [attr.d]="enemyD"
+                fill="none"
+                stroke="red"
+                stroke-width="0.5"></path>
+                <line
+                class="neon"
+                style="color: blue"
+                x1="0"
+                y1="95"
+                x2="100"
+                y2="95"></line>
+             }
+            
+        </svg>
+    </div>
 
     <div class="mt3">
         <button

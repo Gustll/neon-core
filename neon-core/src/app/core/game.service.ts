@@ -19,15 +19,15 @@ export const LEVEL_CONFIG: Record<Level, LevelConfig> = {
     },
     2: {
         minRange: 1,
-        maxRange: 10,
+        maxRange: 30,
         operations: 20,
-        pathDurationMs: 18000,
+        pathDurationMs: 25000,
     },
     3: {
         minRange: 1,
         maxRange: 50,
-        operations: 30,
-        pathDurationMs: 16000,
+        operations: 20,
+        pathDurationMs: 28000,
     },
 };
 
@@ -187,7 +187,7 @@ export class GameService {
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
             history.length - mistakes ===
-            LEVEL_CONFIG[currentState.level].operations
+                LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
 

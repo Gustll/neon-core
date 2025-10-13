@@ -11,4 +11,28 @@
             transform: scale(1.12);
         }
     }
+
+    @keyframes changedash {
+        from {
+            stroke-dashoffset: 502.7825622558594px;
+            stroke-dasharray: 502.7825622558594 502.7825622558594;
+        }
+
+        to {
+            stroke-dashoffset: 0px;
+            stroke-dasharray: 502.7825622558594 502.7825622558594;
+        }
+    }
+
+    path {
+        animation-duration: 1.5s;
+        animation-name: changedash;
+        animation-iteration-count: infinite;
+        animation-direction: normal;
+    }
+
+    .enemy-path-container {
+        width: 220px;
+        height: 220px;
+    }
 }
