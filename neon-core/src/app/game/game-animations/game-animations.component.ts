@@ -44,14 +44,21 @@ export class GameAnimationsComponent implements OnInit {
     private spawnIntervalMs!: number;
     public svgLoadTimeDelta = 0;
 
-    constructor(private route: ActivatedRoute, private pathService: EnemyPathService) {}
+    constructor(
+        private route: ActivatedRoute,
+        private pathService: EnemyPathService,
+    ) {}
     ngOnInit(): void {
         const level = this.route.snapshot.queryParamMap.get('level')
             ? (Number(this.route.snapshot.queryParamMap.get('level')) as Level)
             : 1;
         this.cfg = this.gameService.getLevelConfig(level);
         this.enemyD = this.pathService.levelPath(level);
-        this.spawnIntervalMs = this.pathService.generateSpawnIntervalMs(level, this.cfg.pathDurationMs, this.r);
+        this.spawnIntervalMs = this.pathService.generateSpawnIntervalMs(
+            level,
+            this.cfg.pathDurationMs,
+            this.r,
+        );
     }
 
     public animateGame(): void {

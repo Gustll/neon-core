@@ -39,38 +39,36 @@
         <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div
-        class="ba b--red enemy-path-container">
+    <div class="ba b--red enemy-path-container">
         <svg
             #game
             class="w-100 h-100"
             viewBox="0 0 100 100">
             <!-- Enemy path -->
-             @if (enemyD$ | async; as enemyD) {
+            @if (enemyD$ | async; as enemyD) {
                 <path
-                style="color: red"
-                class="neon neon-pulse"
-                [attr.d]="enemyD"
-                fill="none"
-                stroke="red"
-                stroke-width="0.5"></path>
+                    style="color: red"
+                    class="neon neon-pulse"
+                    [attr.d]="enemyD"
+                    fill="none"
+                    stroke="red"
+                    stroke-width="0.5"></path>
                 <line
-                class="neon"
-                style="color: blue"
-                x1="0"
-                y1="95"
-                x2="100"
-                y2="95"></line>
-             }
-            
+                    class="neon"
+                    style="color: blue"
+                    x1="0"
+                    y1="95"
+                    x2="100"
+                    y2="95"></line>
+            }
         </svg>
     </div>
 
     <div class="mt3">
         <button
             mat-flat-button
-            style="color: blue"
-            color="white neon"
+            style="color: white"
+            color="white neon play-btn"
             (click)="play()"
             [disabled]="!levelControl.valid">
             Play

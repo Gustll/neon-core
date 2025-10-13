@@ -19,7 +19,7 @@
                             name="playerInput" />
                     </mat-form-field>
                     <button
-                        class="flex-auto br b--silver"
+                        class="flex-auto neon"
                         type="button"
                         mat-flat-button
                         [disabled]="!gameForm.valid"
@@ -54,6 +54,16 @@
                         }
                     </span>
                 </div>
+
+                @if (playerFireNotificaton && playerFireNotificaton.value) {
+                    <div
+                        class="absolute z-999 player-fire-notification neon f1"
+                        [ngStyle]="{
+                            color: playerFireNotificaton.value.color,
+                        }">
+                        {{ playerFireNotificaton.value.text }}
+                    </div>
+                }
 
                 <app-game-animations #game></app-game-animations>
             </main>

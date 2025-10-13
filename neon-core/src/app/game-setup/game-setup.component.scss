@@ -35,4 +35,13 @@
         width: 220px;
         height: 220px;
     }
+
+    .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+        background-color: red;
+        color: white;
+    }
+
+    .play-btn {
+        width: 220px;
+    }
 }

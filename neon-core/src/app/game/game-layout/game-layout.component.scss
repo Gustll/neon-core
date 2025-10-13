@@ -21,11 +21,19 @@
         color: #fff;
         caret-color: #fff;
     }
-    .mat-mdc-form-field .mat-mdc-input-element::placeholder {
-        color: rgba(255, 255, 255, 0.7);
+
+    .mat-mdc-unelevated-button[disabled] {
+        color: red;
+        border: 1px solid red;
     }
-    /* Label (floating & resting) */
-    .mat-mdc-form-field .mdc-floating-label {
-        color: rgba(255, 255, 255, 0.7);
+
+    .mat-mdc-unelevated-button {
+        color: blue;
+        border: 1px solid blue;
+    }
+
+    .player-fire-notification {
+        top: 15px;
+        left: 5%;
     }
 }

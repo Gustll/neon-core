@@ -3,6 +3,19 @@
 $primary: mat.$blue-palette;
 $tertiary: mat.$red-palette;
 
+:root {
+    @include mat.fab-overrides(
+        // (
+        //     container-color: transparent,
+        //     disabled-state-container-color: transparent,
+        //     disabled-state-label-text-color: red,
+        //     pressed-state-layer-color: blue,
+        //     pressed-state-layer-opacity: 1,
+        //     ripple-color: rgba(255, 255, 255, 0.2),
+         // )
+    );
+}
+
 html {
     color-scheme: light;
     @include mat.theme(

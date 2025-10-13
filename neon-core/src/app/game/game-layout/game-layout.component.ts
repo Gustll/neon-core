@@ -13,7 +13,12 @@ import { GameService, GameStatus, Level } from '../../core/game.service';
 import { GameAnimationsComponent } from '../game-animations/game-animations.component';
 import { GameHistoryComponent } from '../game-history/game-history.component';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
+interface PlayerFireNotification {
+    text: string;
+    color: 'blue' | 'red';
+}
 @Component({
     selector: 'app-game-layout',
     imports: [
@@ -31,6 +36,22 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameLayoutComponent implements AfterViewInit {
     @ViewChild('game') game!: GameAnimationsComponent;
+
+    private readonly CORRECT_LINES: string[] = [
+        'Blue hit.',
+        'Target down.',
+        'Core steady.',
+        'Nice shot.',
+        'Neon clear.',
+    ];
+
+    private readonly WRONG_LINES: string[] = [
+        'Missed.',
+        'Wrong code.',
+        'Red rising.',
+        'Overheat.',
+        'Try again.',
+    ];
     private gameService = inject(GameService);
 
     public GameStatus = GameStatus;
@@ -41,6 +62,8 @@ export class GameLayoutComponent implements AfterViewInit {
             validators: [Validators.required],
         }),
     });
+    public playerFireNotificaton: BehaviorSubject<PlayerFireNotification | null> =
+        new BehaviorSubject<PlayerFireNotification | null>(null);
 
     public countdown: string = '';
 
@@ -62,6 +85,7 @@ export class GameLayoutComponent implements AfterViewInit {
     public fireLaser() {
         const { playerInput } = this.gameForm.getRawValue();
         if (playerInput) {
+            this.playerFireNotify(playerInput);
             this.game.animateLaser(playerInput);
             this.gameService.fireLaser(playerInput);
         }
@@ -82,5 +106,18 @@ export class GameLayoutComponent implements AfterViewInit {
                 clearInterval(countdownInterval);
             }
         }, 1000);
+    }
+
+    private playerFireNotify(playerInput: number): void {
+        const playerCorrect = this.gameService.isInputCorrect(playerInput);
+        const text = this.getRandomFireNotificationText(playerCorrect);
+        const color = playerCorrect ? 'blue' : 'red';
+        this.playerFireNotificaton.next({ text, color });
+        setTimeout(() => this.playerFireNotificaton.next(null), 1000);
+    }
+
+    private getRandomFireNotificationText(playerCorrect: boolean): string {
+        const pool = playerCorrect ? this.CORRECT_LINES : this.WRONG_LINES;
+        return pool[Math.floor(Math.random() * pool.length)];
     }
 }

@@ -187,7 +187,7 @@ export class GameService {
         // Check if the total of correct answers is the same as the total operations set in the level config
         const status =
             history.length - mistakes ===
-                LEVEL_CONFIG[currentState.level].operations
+            LEVEL_CONFIG[currentState.level].operations
                 ? GameStatus.Won
                 : currentState.status;
 

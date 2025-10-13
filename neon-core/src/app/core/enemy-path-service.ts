@@ -1,13 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Level } from "./game.service";
+import { Injectable } from '@angular/core';
+import { Level } from './game.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class EnemyPathService {
-
-    public generateSpawnIntervalMs(level: Level, pathDurationMs: number, r: number): number {
-        const enemyD = this.levelPath(level)
+    public generateSpawnIntervalMs(
+        level: Level,
+        pathDurationMs: number,
+        r: number,
+    ): number {
+        const enemyD = this.levelPath(level);
         const gap = 0;
         const L = this.pathLengthFromD(enemyD);
         return (pathDurationMs * (2 * r + gap)) / L;
@@ -26,7 +29,8 @@ export class EnemyPathService {
                 return this.straighPath();
             case 2:
                 return this.cubicPath();
-            case 3: return this.zigZagPath();
+            case 3:
+                return this.zigZagPath();
             default:
                 return this.straighPath();
         }
@@ -43,6 +47,4 @@ export class EnemyPathService {
     private zigZagPath(): string {
         return 'M50 0V20H70V40H30V60H70V80H49V95';
     }
-
-
 }

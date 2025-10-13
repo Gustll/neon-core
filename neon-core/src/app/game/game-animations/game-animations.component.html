@@ -27,11 +27,23 @@
             <!-- Enemy path -->
             <path
                 style="color: red"
-                class="neon neon-pulse"
+                class="neon neon-pulse draw-once"
                 [attr.d]="enemyD"
                 fill="none"
+                pathLength="100"
+                stroke-dasharray="100 100"
+                stroke-dashoffset="100"
                 stroke="red"
-                stroke-width="0.5"></path>
+                stroke-width="0.5">
+                <animate
+                    attributeName="stroke-dashoffset"
+                    from="100"
+                    to="0"
+                    dur="3s"
+                    begin="0s"
+                    repeatCount="1"
+                    fill="freeze" />
+            </path>
 
             <!-- ship line at 95% -->
             <line

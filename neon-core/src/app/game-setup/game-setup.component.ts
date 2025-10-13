@@ -6,12 +6,23 @@ import { Router } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { EnemyPathService } from '../core/enemy-path-service';
-import { distinctUntilChanged, filter, map, Observable, startWith, tap } from 'rxjs';
+import {
+    distinctUntilChanged,
+    filter,
+    map,
+    Observable,
+    startWith,
+} from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-game-setup',
-    imports: [CommonModule, ReactiveFormsModule, MatButtonToggleModule, MatButtonModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonToggleModule,
+        MatButtonModule,
+    ],
     templateUrl: './game-setup.component.html',
     styleUrl: './game-setup.component.scss',
 })
@@ -19,22 +30,21 @@ export class GameSetupComponent {
     public levelControl = new FormControl<Level>(1, {
         validators: [Validators.required],
     });
-    public enemyD$!: Observable<string>
+    public enemyD$!: Observable<string>;
 
     constructor(
         private router: Router,
         private access: GameAccessService,
-        private pathService: EnemyPathService
+        private pathService: EnemyPathService,
     ) {
         this.enemyD$ = this.levelControl.valueChanges.pipe(
             startWith(this.levelControl.value),
             distinctUntilChanged(),
             filter((level) => level !== null),
             map((level: Level) => {
-                return this.pathService.levelPath(level)
-            })
-        )
-
+                return this.pathService.levelPath(level);
+            }),
+        );
     }
 
     public play(): void {
