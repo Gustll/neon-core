@@ -27,6 +27,7 @@
     <p class="neon white f2 mt3">Select level:</p>
 
     <mat-button-toggle-group
+        data-testid="level-group"
         class="white neon mb3"
         style="color: red"
         hideSingleSelectionIndicator
@@ -36,7 +37,11 @@
         aria-label="Select difficulty level">
         <mat-button-toggle [value]="1">Level 1</mat-button-toggle>
         <mat-button-toggle [value]="2">Level 2</mat-button-toggle>
-        <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
+        <mat-button-toggle
+            data-testid="level-3"
+            [value]="3"
+            >Level 3</mat-button-toggle
+        >
     </mat-button-toggle-group>
 
     <div class="ba b--red enemy-path-container">
@@ -68,7 +73,8 @@
         <button
             mat-flat-button
             style="color: white"
-            color="white neon play-btn"
+            class="white neon play-btn"
+            data-testid="play-btn"
             (click)="play()"
             [disabled]="!levelControl.valid">
             Play

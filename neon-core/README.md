@@ -1,20 +1,20 @@
 # NEON CORE
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) 
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli)
 
-### Browser Support
-Chrome ✅
-Firefox ✅
-Edge ✅
+## Browser Support
+Chrome ✅   
+Firefox ✅   
+Edge ✅   
 Safari ❌ (not supported, please use another browser -> for now)
 
-### Prerequisites
+## Prerequisites
 Before running the project locally (without docker), ensure you have:
 - Node.js 22+
 - Angular CLI 19+
 
 
-### Git pre-push hook (symlink) -> we can also do this with hooks Path
+## Git pre-push hook (symlink) -> we can also do this with hooks Path
 To always have pre-push up to date link it to .git/hooks/pre-push so it runs on every push
 1. Make the hook executable 
 ```
@@ -26,12 +26,23 @@ chmod +x scripts/pre-push
 ln -sf "$(pwd)/scripts/pre-push" .git/hooks/pre-push
 ```
 
-### Test
+## Test
+### UnitTests
 ```
 npm test               # runs the Angular/Karma tests
 ```
 
-### Lint & Format
+### E2E tests
+
+```
+npm e2e                 # runs the playwright tests
+npm e2e:ui              # visual test explorer
+npm e2e:report          # open last HTML report
+npm run e2e:headed      # run with a visible browser window
+npm run e2e:debug       # debug mode 
+```
+
+## Lint & Format
 ```
 cd neon-core
 npm run lint           # eslint ./src/
@@ -39,18 +50,18 @@ npm run format         # prettier --write ./src
 npm run format-check   # prettier --check ./src
 ```
 
-### Install & Run
+## Install & Run
 ```
 npm install
 npm start              # alias for: ng serve
 ```
 
-### Build 
+## Build 
 ```
 npm run build
 ```
 
-### Runnin with docker
+## Runnin with docker
 Navigate to the project
 
 ```
