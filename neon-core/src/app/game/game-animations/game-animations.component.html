@@ -27,7 +27,6 @@
             <!-- Enemy path -->
             <path
                 style="color: red"
-                class="neon neon-pulse draw-once"
                 [attr.d]="enemyD"
                 fill="none"
                 pathLength="100"
@@ -35,11 +34,15 @@
                 stroke-dashoffset="100"
                 stroke="red"
                 stroke-width="0.5">
+                <set
+                    attributeName="class"
+                    to="neon neon-pulse"
+                    begin="2.1s"></set>
                 <animate
                     attributeName="stroke-dashoffset"
                     from="100"
                     to="0"
-                    dur="3s"
+                    dur="2s"
                     begin="0s"
                     repeatCount="1"
                     fill="freeze" />
@@ -61,8 +64,10 @@
 
             @for (enemy of gameState.enemies; track enemy) {
                 <circle
+                    class="reveal-on-delay"
                     [attr.r]="r"
                     [attr.id]="isFirstEnemy(enemy.beginMs) ? 'first-enemy' : ''"
+                    [style.animationDelay]="enemy.beginMs - 3900 + 'ms'"
                     fill="none"
                     stroke-width="0.5"
                     stroke="red">

@@ -39,7 +39,6 @@ export class GameAnimationsComponent implements OnInit {
     public cfg!: LevelConfig;
     public laser$ = new BehaviorSubject<Laser | null>(null);
     public timestamp = Date.now();
-    public timeDelta!: number;
     public r: number = 1.5;
     private spawnIntervalMs!: number;
     public svgLoadTimeDelta = 0;

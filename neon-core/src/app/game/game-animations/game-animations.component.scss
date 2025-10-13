@@ -1,0 +1,12 @@
+.reveal-on-delay {
+    opacity: 0;
+    animation-name: cg-reveal;
+    animation-duration: 0s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes cg-reveal {
+    to {
+        opacity: 1;
+    }
+}
