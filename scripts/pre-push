@@ -3,7 +3,7 @@
 # name this file pre-push
 # and place it in .git/hooks
 
-function fe-sph {
+function fe-neon {
     cd `git rev-parse --show-toplevel`
 
     npm run lint
@@ -19,7 +19,7 @@ function fe-sph {
     fi
 }
 
-fe-sph &
+fe-neon &
 J1=$!
 
 wait $J1
