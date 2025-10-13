@@ -6,13 +6,7 @@ import { Router } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { EnemyPathService } from '../core/enemy-path-service';
-import {
-    distinctUntilChanged,
-    filter,
-    map,
-    Observable,
-    startWith,
-} from 'rxjs';
+import { distinctUntilChanged, filter, map, Observable, startWith } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({

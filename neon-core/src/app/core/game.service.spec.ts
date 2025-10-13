@@ -62,7 +62,12 @@ describe('GameService', () => {
             service.fireLaser(fakeOp.result);
 
             const history: GameHistory[] = [
-                { attempt: 1, operation: fakeOp, playerInput: fakeOp.result },
+                {
+                    attempt: 1,
+                    operation: fakeOp,
+                    playerInput: fakeOp.result,
+                    playerCorrect: true,
+                },
             ];
 
             service.vm$.pipe(take(1)).subscribe((state) => {
@@ -92,11 +97,17 @@ describe('GameService', () => {
 
             const history: GameHistory[] = [
                 {
+                    attempt: 2,
+                    operation: fakeOp,
+                    playerInput: wrongInput,
+                    playerCorrect: false,
+                },
+                {
                     attempt: 1,
                     operation: fakeOp,
                     playerInput: fakeOp.result,
+                    playerCorrect: true,
                 },
-                { attempt: 2, operation: fakeOp, playerInput: wrongInput },
             ];
 
             service.vm$.pipe(take(1)).subscribe((state) => {
@@ -125,15 +136,18 @@ describe('GameService', () => {
             // We could also modify the LEVEL_CONFIG to get the right amount of history and operations for the win
             const history: GameHistory[] = Array.from({
                 length: levelConfig.operations,
-            }).reduce((acc: GameHistory[], _, i: number) => {
-                service.fireLaser(fakeOp.result);
-                acc.push({
-                    attempt: i + 1,
-                    operation: fakeOp,
-                    playerInput: fakeOp.result,
-                });
-                return acc;
-            }, [] as GameHistory[]);
+            })
+                .reduce((acc: GameHistory[], _, i: number) => {
+                    service.fireLaser(fakeOp.result);
+                    acc.push({
+                        attempt: i + 1,
+                        operation: fakeOp,
+                        playerInput: fakeOp.result,
+                        playerCorrect: true,
+                    });
+                    return acc;
+                }, [] as GameHistory[])
+                .reverse();
 
             service.vm$.pipe(take(1)).subscribe((state) => {
                 expect(state.status).toEqual(GameStatus.Won);
