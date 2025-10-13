@@ -3,8 +3,13 @@
 # name this file pre-push
 # and place it in .git/hooks
 
+function check-for-uncommitted-changes {
+    git status | grep 'nothing to commit, working tree clean' || { echo "you have uncommitted changes"; exit 1; };
+}
+
 function fe-neon {
-    cd `git rev-parse --show-toplevel`
+    cd `git rev-parse --show-top`
+    cd ./neon-core
 
     npm run lint
     if [ $? != 0 ]; then
@@ -19,6 +24,7 @@ function fe-neon {
     fi
 }
 
+check-for-uncommitted-changes
 fe-neon &
 J1=$!
 
