@@ -194,6 +194,11 @@ export class GameService {
                 ? GameStatus.Won
                 : currentState.status;
 
+        if (status === GameStatus.Won) {
+            this.soundService.stop('music');
+            this.soundService.play('gameWon');
+        }
+
         this.state$.next({
             ...currentState,
             history,
@@ -220,10 +225,6 @@ export class GameService {
     }
 
     public changeGameStatus(status: GameStatus) {
-        if (status === GameStatus.Won) {
-            this.soundService.stop('music');
-            this.soundService.play('gameWon');
-        }
         if (status === GameStatus.GameOver) {
             this.soundService.stop('music');
             this.soundService.play('gameOver');
