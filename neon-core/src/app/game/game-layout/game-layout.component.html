@@ -14,7 +14,11 @@
                             autocomplete="off"
                             matInput
                             type="number"
-                            (keydown.enter)="gameForm.valid && fireLaser()"
+                            (keydown.enter)="
+                                gameForm.valid &&
+                                    gameState.status == GameStatus.Running &&
+                                    fireLaser()
+                            "
                             formControlName="playerInput"
                             name="playerInput" />
                     </mat-form-field>
