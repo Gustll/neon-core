@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { GameService } from '../../core/game.service';
 import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-game-history',
-    imports: [CommonModule],
+    imports: [CommonModule, MatTooltipModule],
     templateUrl: './game-history.component.html',
     styleUrl: './game-history.component.scss',
     standalone: true,

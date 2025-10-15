@@ -4,19 +4,24 @@
             <div
                 class="flex flex-wrap mb3 pv2 br4 white-90 f4 ba"
                 [ngClass]="history.playerCorrect ? 'b--blue' : 'b--red'">
-                <div class="w-60">
+                <div class="w-50">
                     <div class="pl3 neon">
                         {{ history.operation.a }} + {{ history.operation.b }} =
                     </div>
                 </div>
                 <div
-                    class="w-20 tc"
+                    class="w-25 tc truncate"
+                    [matTooltip]="`${history.playerInput}`"
+                    [matTooltipClass]="
+                        history.playerCorrect ? 'blue-tooltip' : 'red-tooltip'
+                    "
+                    matTooltipPosition="above"
                     [ngClass]="history.playerCorrect ? 'white' : 'red'">
-                    <div>{{ history.playerInput }}</div>
+                    {{ history.playerInput }}
                 </div>
                 @if (!history.playerCorrect) {
-                    <div class="w-20 tc blue neon">
-                        <div class="">{{ history.operation.result }}</div>
+                    <div class="w-25 tc blue neon truncate">
+                        {{ history.operation.result }}
                     </div>
                 }
 
