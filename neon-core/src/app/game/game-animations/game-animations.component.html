@@ -27,6 +27,9 @@
             <!-- Enemy path -->
             <path
                 style="color: red"
+                [ngStyle]="{
+                    color: gameState.status !== GameStatus.Won ? 'red' : 'blue',
+                }"
                 [attr.d]="enemyD"
                 fill="none"
                 pathLength="100"

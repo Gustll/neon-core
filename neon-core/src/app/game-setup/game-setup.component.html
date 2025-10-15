@@ -28,8 +28,7 @@
 
     <mat-button-toggle-group
         data-testid="level-group"
-        class="white neon mb3"
-        style="color: red"
+        class="neon mb3 red"
         hideSingleSelectionIndicator
         [formControl]="levelControl"
         flat
@@ -76,8 +75,7 @@
     <div class="mt3">
         <button
             mat-flat-button
-            style="color: white"
-            class="white neon play-btn"
+            class="neon play-btn"
             data-testid="play-btn"
             (click)="play()"
             [disabled]="!levelControl.valid">
