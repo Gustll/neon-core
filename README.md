@@ -1,5 +1,3 @@
-# Dhimahi employment opportunity test task for Gal Krauthaker
-
 ## 1 Introduction
 
 This task is designed to evaluate your Angular expertise, technical knowledge, and communication skills. It assumes you have hands-on experience with Angular development, TypeScript, RxJS, and component-driven architecture, as well as familiarity with common practices such as state management, modular design, and automated testing.
